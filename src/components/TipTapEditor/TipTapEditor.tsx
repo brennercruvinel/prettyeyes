@@ -17,6 +17,7 @@ import Typography from "@tiptap/extension-typography";
 import Gapcursor from "@tiptap/extension-gapcursor";
 import { SimpleDragDrop } from "./extensions/SimpleDragDrop";
 import { PreventAutoScroll } from "./extensions/PreventAutoScroll";
+import { ImprovedHardBreak } from "./extensions/ImprovedHardBreak";
 import { useState, useEffect } from "react";
 import CommandPalette from "./CommandPalette";
 import CustomBubbleMenu from "./CustomBubbleMenu";
@@ -412,6 +413,7 @@ export default function TipTapEditor({
       Gapcursor,
       SimpleDragDrop,
       PreventAutoScroll,
+      ImprovedHardBreak,
     ],
     content: "",
     onUpdate: ({ editor }) => {

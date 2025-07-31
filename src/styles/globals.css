@@ -97,6 +97,13 @@ body {
   scroll-behavior: auto !important;
 }
 
+/* Hard break (Shift+Enter) styling */
+.ProseMirror br {
+  display: block;
+  content: "";
+  margin-top: 0;
+}
+
 /* Prevent auto-scrolling behavior */
 .ProseMirror:focus {
   outline: none;
@@ -272,6 +279,13 @@ body {
   margin: 1rem 0;
   color: #8b949e;
   font-style: italic;
+}
+
+/* Allow line breaks in blockquotes */
+.ProseMirror blockquote br {
+  display: block;
+  content: "";
+  margin-top: 0.5em;
 }
 
 .ProseMirror code {
