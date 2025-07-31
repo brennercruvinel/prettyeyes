@@ -5,6 +5,8 @@
 [![Vite](https://img.shields.io/badge/Vite-7.0.4-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/brennercruvinel/prettyeyes/blob/main/CONTRIBUTING.md)
 
+## WIP 65% DONE - Watch out for bugs
+
 ## What is `PrettyEyes`?
 A WYSIWYG Markdown editor that `finally doesn't make me want to cry` while creating GitHub READMEs.
 
