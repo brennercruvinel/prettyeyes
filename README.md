@@ -6,8 +6,9 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/brennercruvinel/prettyeyes/blob/main/CONTRIBUTING.md)
 
 ## What is `PrettyEyes`?
-
 A WYSIWYG Markdown editor that `finally doesn't make me want to cry` while creating GitHub READMEs.
+
+https://github.com/user-attachments/assets/3f90f20a-05e3-4cc4-b38b-f771355d5425
 
 ### You know the drill...
 
