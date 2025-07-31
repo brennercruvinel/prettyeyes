@@ -55,9 +55,7 @@ export default function TableModal({ opened, onClose, onInsert }: TableModalProp
             </Text>
             <Box
               style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(8, 1fr)',
-                gap: '4px',
+                display: 'inline-block',
                 padding: '8px',
                 backgroundColor: '#0d1117',
                 borderRadius: '4px',
@@ -65,29 +63,43 @@ export default function TableModal({ opened, onClose, onInsert }: TableModalProp
               }}
               onMouseLeave={() => setHoveredCell(null)}
             >
-              {Array.from({ length: 8 }, (_, row) =>
-                Array.from({ length: 8 }, (_, col) => (
-                  <Box
-                    key={`${row}-${col}`}
-                    onMouseEnter={() => handleGridHover(row, col)}
-                    onClick={() => {
-                      setRows(row + 1);
-                      setCols(col + 1);
-                    }}
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                      backgroundColor:
-                        hoveredCell && row <= hoveredCell.row && col <= hoveredCell.col
-                          ? '#58a6ff'
-                          : '#30363d',
-                      borderRadius: '2px',
-                      cursor: 'pointer',
-                      transition: 'background-color 0.1s ease',
-                    }}
-                  />
-                ))
-              )}
+              <Box
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(10, 1fr)',
+                  gap: '3px',
+                }}
+              >
+                {Array.from({ length: 10 }, (_, row) =>
+                  Array.from({ length: 10 }, (_, col) => (
+                    <Box
+                      key={`${row}-${col}`}
+                      onMouseEnter={() => handleGridHover(row, col)}
+                      onClick={() => {
+                        setRows(row + 1);
+                        setCols(col + 1);
+                        handleSubmit(new Event('submit') as any);
+                      }}
+                      style={{
+                        width: '26px',
+                        height: '26px',
+                        backgroundColor:
+                          hoveredCell && row <= hoveredCell.row && col <= hoveredCell.col
+                            ? '#8b949e'
+                            : '#21262d',
+                        border: '1px solid',
+                        borderColor:
+                          hoveredCell && row <= hoveredCell.row && col <= hoveredCell.col
+                            ? '#6e7681'
+                            : '#30363d',
+                        borderRadius: '3px',
+                        cursor: 'pointer',
+                        transition: 'all 0.1s ease',
+                      }}
+                    />
+                  ))
+                )}
+              </Box>
             </Box>
             <Text size="xs" ta="center" mt="xs" c="dimmed">
               {rows} × {cols}

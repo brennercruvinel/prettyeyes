@@ -16,6 +16,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Typography from "@tiptap/extension-typography";
 import Gapcursor from "@tiptap/extension-gapcursor";
 import { SimpleDragDrop } from "./extensions/SimpleDragDrop";
+import { PreventAutoScroll } from "./extensions/PreventAutoScroll";
 import { useState, useEffect } from "react";
 import CommandPalette from "./CommandPalette";
 import CustomBubbleMenu from "./CustomBubbleMenu";
@@ -295,6 +296,7 @@ export default function TipTapEditor({
   const [showKeyboardModal, setShowKeyboardModal] = useState(false);
 
   const editor = useEditor({
+    autofocus: false,
     extensions: [
       StarterKit.configure({
         gapcursor: false, // Desabilitar gapcursor do StarterKit
@@ -359,24 +361,25 @@ export default function TipTapEditor({
       }),
       Table.configure({
         resizable: true,
+        handleWidth: 5,
+        cellMinWidth: 100,
         HTMLAttributes: {
-          class: "border-collapse table-auto w-full my-4",
+          class: "tiptap-table",
         },
       }),
       TableRow.configure({
         HTMLAttributes: {
-          class: "border-b border-gray-700",
+          class: "tiptap-table-row",
         },
       }),
       TableHeader.configure({
         HTMLAttributes: {
-          class:
-            "bg-gray-800 px-4 py-2 text-left font-semibold border border-gray-700",
+          class: "tiptap-table-header",
         },
       }),
       TableCell.configure({
         HTMLAttributes: {
-          class: "px-4 py-2 border border-gray-700",
+          class: "tiptap-table-cell",
         },
       }),
       Link.configure({
@@ -408,6 +411,7 @@ export default function TipTapEditor({
       Typography,
       Gapcursor,
       SimpleDragDrop,
+      PreventAutoScroll,
     ],
     content: "",
     onUpdate: ({ editor }) => {
@@ -422,6 +426,8 @@ export default function TipTapEditor({
           "prose prose-invert max-w-none focus:outline-none min-h-[500px] p-8",
         spellcheck: "false",
       },
+      scrollThreshold: 0,
+      scrollMargin: 0,
       handlePaste: (_view, event) => {
         const clipboardData = event.clipboardData;
         if (!clipboardData) return false;
