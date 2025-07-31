@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./styles/globals.css";
 import TipTapEditor from "./components/TipTapEditor/TipTapEditor";
 import { FiMenu, FiDownload, FiUpload, FiFileText, FiSettings, FiChevronRight } from "react-icons/fi";
@@ -9,7 +9,7 @@ function App() {
   const [content, setContent] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const handleExportMarkdown = () => {
+  const handleExportMarkdown = useCallback(() => {
     const blob = new Blob([content], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const downloadLink = document.createElement("a");
@@ -18,7 +18,7 @@ function App() {
     downloadLink.click();
     URL.revokeObjectURL(url);
     toast.success(`Exported ${fileName}.md`);
-  };
+  }, [content, fileName]);
 
   const handleImportFile = () => {
     const fileInput = document.createElement("input");
@@ -55,7 +55,7 @@ function App() {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [content, fileName, sidebarOpen]);
+  }, [content, fileName, sidebarOpen, handleExportMarkdown]);
 
   return (
     <div className="flex h-screen bg-[var(--notion-bg)]">

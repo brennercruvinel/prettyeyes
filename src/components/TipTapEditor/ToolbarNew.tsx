@@ -5,7 +5,6 @@ import {
   FiUnderline,
   FiCode,
   FiList,
-  FiHash,
   FiLink,
   FiImage,
   FiAlignLeft,
@@ -26,7 +25,15 @@ export default function Toolbar({ editor }: ToolbarProps) {
     return null;
   }
 
-  const ToolButton = ({ onClick, isActive = false, disabled = false, title, children }: any) => (
+  interface ToolButtonProps {
+    onClick: () => void;
+    isActive?: boolean;
+    disabled?: boolean;
+    title: string;
+    children: React.ReactNode;
+  }
+
+  const ToolButton = ({ onClick, isActive = false, disabled = false, title, children }: ToolButtonProps) => (
     <button
       onClick={onClick}
       disabled={disabled}

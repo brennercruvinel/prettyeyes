@@ -1,9 +1,6 @@
 import { Editor } from "@tiptap/react";
 import { 
-  FiPlus, 
-  FiMinus, 
   FiTrash2, 
-  FiColumns,
   FiGrid
 } from "react-icons/fi";
 import { 

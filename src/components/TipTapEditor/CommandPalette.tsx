@@ -124,7 +124,7 @@ export default function CommandPalette({
       category: "Basic blocks",
       action: () => {
         editor.chain().focus().toggleBulletList().run();
-        editor.chain().focus().toggleTaskItem({ checked: false }).run();
+        editor.chain().focus().toggleTaskList().run();
         onClose();
       },
     },

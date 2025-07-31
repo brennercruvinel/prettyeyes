@@ -127,7 +127,7 @@ export default function CommandPalette({
       category: "Basic blocks",
       action: () => {
         editor.chain().focus().toggleBulletList().run();
-        editor.chain().focus().toggleTaskItem({ checked: false }).run();
+        editor.chain().focus().toggleTaskList().run();
         onClose();
       },
     },
@@ -367,10 +367,9 @@ export default function CommandPalette({
                         ${isSelected ? 'bg-[#1f6feb] command-item-selected' : ''}
                       `}
                     >
-                      <command.icon 
-                        size={20} 
-                        className={isSelected ? 'text-white' : 'text-[#8b949e]'} 
-                      />
+                      <span className={isSelected ? 'text-white' : 'text-[#8b949e]'}>
+                        <command.icon size={20} />
+                      </span>
                       <div className="flex-1 text-left">
                         <div className={`font-medium ${isSelected ? 'text-white' : 'text-[#c9d1d9]'}`}>
                           {command.title}

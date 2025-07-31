@@ -5,7 +5,6 @@ import {
   FiUnderline,
   FiCode,
   FiList,
-  FiHash,
   FiLink,
   FiImage,
   FiAlignLeft,

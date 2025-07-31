@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Modal, TextInput, Button, Group, Stack, Checkbox, ActionIcon } from '@mantine/core';
+import { Modal, TextInput, Button, Group, Stack, Checkbox } from '@mantine/core';
 import { FiLink, FiExternalLink } from 'react-icons/fi';
 
 interface LinkModalProps {
