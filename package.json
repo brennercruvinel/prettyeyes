@@ -10,7 +10,8 @@
     "dev:regular": "vite",
     "build": "npm run clean && tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@lexical/code": "^0.33.1",

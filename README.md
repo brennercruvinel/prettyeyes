@@ -261,6 +261,5 @@ If you found a bug, open an issue. If you have an idea, share it. If you want to
 <div align="center">
   <sub>
     Built by a developer tired of writing <code>![](https://img.shields.io/badge/...)</code> by hand<br>
-    Made with ❤️, React, TipTap, and a lot of coffee ☕
   </sub>
 </div>
