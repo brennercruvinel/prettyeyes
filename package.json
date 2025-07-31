@@ -57,8 +57,8 @@
     "@tiptap/react": "^3.0.7",
     "@tiptap/starter-kit": "^3.0.7",
     "@tiptap/suggestion": "^3.0.7",
-    "@types/dompurify": "^3.0.5",
-    "@types/marked": "^5.0.2",
+    "@types/dompurify": "^3.2.0",
+    "@types/marked": "^6.0.0",
     "@uiw/react-markdown-preview": "^5.1.5",
     "@uiw/react-md-editor": "^4.0.8",
     "clsx": "^2.1.1",
@@ -91,7 +91,7 @@
     "tiptap-extension-global-drag-handle": "^0.1.18",
     "turndown": "^7.2.0",
     "unified": "^11.0.5",
-    "zustand": "^5.0.6"
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
