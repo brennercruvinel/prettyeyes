@@ -1,5 +1,4 @@
 # PrettyEyes
-![GitHub Repo stars](https://img.shields.io/github/stars/brennercruvinel/prettyeyes?style=social)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/brennercruvinel/prettyeyes)
 [![React](https://img.shields.io/badge/React-19.1.0-61DAFB?style=flat&logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
