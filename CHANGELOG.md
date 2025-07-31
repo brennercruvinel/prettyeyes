@@ -15,17 +15,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Badge creation modal with live preview
 - Image upload support with file input
 - Command palette improvements
+- Professional documentation (CONTRIBUTING.md, LICENSE)
+- GitHub workflows for CI/CD
+- Issue and PR templates
 
 ### Changed
 - Refactored all modals to use Mantine components
 - Improved code organization and removed redundant comments
 - Updated dependencies to latest versions
 - Enhanced TypeScript type safety
+- Import/export buttons now follow monochrome design system
 
 ### Fixed
 - Modal positioning and responsiveness issues
 - Drag handle visibility and interaction bugs
 - Import/export functionality edge cases
+- All TypeScript compilation errors
+- ESLint warnings and unused imports
+- Variable hoisting issues in components
+- Mantine theme compatibility issues
 
 ## [1.0.0] - 2024-01-31
 
