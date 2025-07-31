@@ -89,7 +89,7 @@ export default function AlertModal({ onClose, onInsert, defaultType = 'note' }: 
                   <button
                     key={alert.type}
                     type="button"
-                    onClick={() => setSelectedType(alert.type as any)}
+                    onClick={() => setSelectedType(alert.type as 'note' | 'tip' | 'important' | 'warning' | 'caution')}
                     className={`p-3 rounded border transition-all ${
                       selectedType === alert.type
                         ? 'border-github-accent shadow-md'

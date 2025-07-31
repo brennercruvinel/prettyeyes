@@ -1,6 +1,19 @@
 import { Extension } from '@tiptap/core';
 import { Plugin, PluginKey } from '@tiptap/pm/state';
 import { Decoration, DecorationSet } from '@tiptap/pm/view';
+import { Fragment } from '@tiptap/pm/model';
+
+interface DraggedBlock {
+  from: number;
+  to: number;
+  content: Fragment;
+}
+
+declare global {
+  interface Window {
+    __draggedBlock?: DraggedBlock;
+  }
+}
 
 export const NotionDragDrop = Extension.create({
   name: 'notionDragDrop',
@@ -13,7 +26,7 @@ export const NotionDragDrop = Extension.create({
   },
 
   addProseMirrorPlugins() {
-    const extension = this;
+    const options = this.options;
 
     return [
       new Plugin({
@@ -34,7 +47,8 @@ export const NotionDragDrop = Extension.create({
 
         props: {
           decorations(state) {
-            const { hoveredBlock } = this.getState(state);
+            const pluginState = this.getState(state);
+            const hoveredBlock = pluginState?.hoveredBlock;
             if (!hoveredBlock) return DecorationSet.empty;
 
             const decorations: Decoration[] = [];
@@ -69,7 +83,7 @@ export const NotionDragDrop = Extension.create({
                 e.dataTransfer.setData('text/plain', ''); // Required for Firefox
                 
                 // Store block info in a global variable
-                (window as any).__draggedBlock = {
+                window.__draggedBlock = {
                   from,
                   to,
                   content: state.doc.slice(from, to).content
@@ -84,7 +98,7 @@ export const NotionDragDrop = Extension.create({
               
               handle.addEventListener('dragend', () => {
                 // Clean up
-                delete (window as any).__draggedBlock;
+                delete window.__draggedBlock;
                 document.querySelectorAll('.dragging').forEach(el => {
                   el.classList.remove('dragging');
                 });
@@ -116,7 +130,7 @@ export const NotionDragDrop = Extension.create({
               
               // Check if we're in the editor's left margin area
               const editorRect = view.dom.getBoundingClientRect();
-              const inMargin = event.clientX < editorRect.left + extension.options.threshold;
+              const inMargin = event.clientX < editorRect.left + options.threshold;
               
               if (inMargin && node && $pos.depth === 1) {
                 // Get the position of the parent block
@@ -177,7 +191,7 @@ export const NotionDragDrop = Extension.create({
             drop: (view, event) => {
               event.preventDefault();
               
-              const draggedBlock = (window as any).__draggedBlock;
+              const draggedBlock = window.__draggedBlock;
               if (!draggedBlock) return false;
               
               const dropPos = view.posAtCoords({ left: event.clientX, top: event.clientY });
@@ -212,7 +226,7 @@ export const NotionDragDrop = Extension.create({
               view.dispatch(tr);
               
               // Clean up
-              delete (window as any).__draggedBlock;
+              delete window.__draggedBlock;
               document.querySelectorAll('.dragging').forEach(el => {
                 el.classList.remove('dragging');
               });

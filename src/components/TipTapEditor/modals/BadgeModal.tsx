@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Modal, TextInput, Button, Group, Stack, Text, Box, SegmentedControl, ColorPicker } from '@mantine/core';
+import { Modal, TextInput, Button, Group, Stack, Text, Box, SegmentedControl } from '@mantine/core';
 import { FiShield } from 'react-icons/fi';
 import { modalStyles } from './modalStyles';
 

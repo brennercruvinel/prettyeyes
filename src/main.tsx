@@ -19,7 +19,6 @@ createRoot(rootElement).render(
     <MantineProvider 
       defaultColorScheme="dark"
       theme={{
-        colorScheme: 'dark',
         primaryColor: 'blue',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
         colors: {

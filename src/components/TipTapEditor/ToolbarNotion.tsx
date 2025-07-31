@@ -25,12 +25,19 @@ interface ToolbarProps {
 export default function ToolbarNotion({ editor }: ToolbarProps) {
   if (!editor) return null;
 
+  interface ToolButtonProps {
+    onClick: () => void;
+    isActive?: boolean;
+    title: string;
+    children: React.ReactNode;
+  }
+
   const ToolButton = ({ 
     onClick, 
     isActive = false, 
     title, 
     children 
-  }: any) => (
+  }: ToolButtonProps) => (
     <button
       onClick={onClick}
       title={title}

@@ -94,7 +94,7 @@ export default function MermaidModal({ onClose, onInsert }: MermaidModalProps) {
             <div>
               <label className="block text-sm text-github-text mb-2">Diagram Type</label>
               <div className="grid grid-cols-3 gap-2">
-                {Object.entries(mermaidTemplates).map(([key, _]) => (
+                {Object.entries(mermaidTemplates).map(([key]) => (
                   <button
                     key={key}
                     type="button"

@@ -19,7 +19,6 @@ import { SimpleDragDrop } from "./extensions/SimpleDragDrop";
 import { useState, useEffect } from "react";
 import CommandPalette from "./CommandPalette";
 import CustomBubbleMenu from "./CustomBubbleMenu";
-import CustomFloatingMenu from "./CustomFloatingMenu";
 import Toolbar from "./Toolbar";
 import ImageModal from "./modals/ImageModal";
 import LinkModal from "./modals/LinkModal";
@@ -577,11 +576,11 @@ export default function TipTapEditor({
     setShowCommandPalette(false);
   };
 
-  const handleInsertTable = (rows: number, cols: number, withHeader: boolean) => {
+  const handleInsertTable = (rows: number, cols: number) => {
     editor
       .chain()
       .focus()
-      .insertTable({ rows, cols, withHeaderRow: withHeader })
+      .insertTable({ rows, cols, withHeaderRow: true })
       .run();
   };
 

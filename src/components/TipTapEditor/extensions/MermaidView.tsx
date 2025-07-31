@@ -1,6 +1,6 @@
 import { NodeViewWrapper } from '@tiptap/react';
 import type { NodeViewProps } from '@tiptap/react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { FiEdit2, FiCheck, FiX, FiCode } from 'react-icons/fi';
 import mermaid from 'mermaid';
 
@@ -30,13 +30,7 @@ const MermaidView = ({ node, updateAttributes }: NodeViewProps) => {
     });
   }, []);
 
-  useEffect(() => {
-    if (!isEditing && mermaidRef.current) {
-      renderDiagram(node.attrs.code);
-    }
-  }, [node.attrs.code, isEditing]);
-
-  const renderDiagram = async (code: string) => {
+  const renderDiagram = useCallback(async (code: string) => {
     if (!mermaidRef.current) return;
 
     try {
@@ -47,9 +41,15 @@ const MermaidView = ({ node, updateAttributes }: NodeViewProps) => {
       mermaidRef.current.innerHTML = svg;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to render diagram');
-      mermaidRef.current.innerHTML = `<div class="text-red-400 text-sm p-4">Error: ${error}</div>`;
+      mermaidRef.current.innerHTML = `<div class="text-red-400 text-sm p-4">Error: ${err instanceof Error ? err.message : 'Failed to render diagram'}</div>`;
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!isEditing && mermaidRef.current) {
+      renderDiagram(node.attrs.code);
+    }
+  }, [node.attrs.code, isEditing, renderDiagram]);
 
   const handleSave = async () => {
     try {

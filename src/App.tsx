@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./styles/globals.css";
 import TipTapEditor from "./components/TipTapEditor/TipTapEditor";
 import { FiEye, FiDownload, FiUpload } from "react-icons/fi";
@@ -8,7 +8,7 @@ function App() {
   const [fileName, setFileName] = useState("README.md");
   const [content, setContent] = useState("");
 
-  const handleExportMarkdown = () => {
+  const handleExportMarkdown = useCallback(() => {
     const blob = new Blob([content], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const downloadLink = document.createElement("a");
@@ -17,7 +17,7 @@ function App() {
     downloadLink.click();
     URL.revokeObjectURL(url);
     toast.success(`Exported ${fileName}`);
-  };
+  }, [content, fileName]);
 
   const handleImportFile = () => {
     const fileInput = document.createElement("input");
@@ -50,7 +50,7 @@ function App() {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [content, fileName]);
+  }, [content, fileName, handleExportMarkdown]);
 
 
   return (
@@ -74,14 +74,15 @@ function App() {
         <div className="flex items-center gap-2">
           <button
             onClick={handleImportFile}
-            className="flex items-center gap-2 px-3 py-1.5 bg-github-bg border border-github-border rounded text-github-text text-sm hover:bg-github-border transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-github-surface border border-github-border rounded-md text-github-text text-sm font-medium hover:bg-github-bg transition-all duration-200 shadow-sm hover:shadow"
+            title="Import File (Ctrl+O)"
           >
             <FiUpload className="w-4 h-4" />
             Import
           </button>
           <button
             onClick={handleExportMarkdown}
-            className="flex items-center gap-2 px-3 py-1.5 bg-github-accent hover:bg-blue-600 text-white rounded text-sm transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-github-text hover:bg-gray-100 text-github-bg rounded-md text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md"
             title="Export Markdown (Ctrl+S)"
           >
             <FiDownload className="w-4 h-4" />
@@ -119,7 +120,7 @@ function App() {
 
       {/* Status Bar */}
       <footer className="flex items-center justify-between px-6 py-2 bg-github-surface border-t border-github-border text-sm text-github-muted">
-        <span>Modern Markdown Editor • Press / for commands</span>
+        <span>Press / for commands</span>
         <span>{content.length} characters</span>
       </footer>
     </div>
