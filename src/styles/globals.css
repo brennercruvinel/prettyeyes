@@ -1,0 +1,980 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Design System - comentado por enquanto */
+/* @import './design-system.css'; */
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: #0d1117;
+  color: #c9d1d9;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Utility classes */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-6 { gap: 1.5rem; }
+.px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+.text-xl { font-size: 1.25rem; }
+.text-sm { font-size: 0.875rem; }
+.text-2xl { font-size: 1.5rem; }
+.font-semibold { font-weight: 600; }
+.w-48 { width: 12rem; }
+.h-screen { height: 100vh; }
+.h-full { height: 100%; }
+.flex-1 { flex: 1; }
+.overflow-hidden { overflow: hidden; }
+.overflow-y-auto { overflow-y: auto; }
+.overflow-x-visible { overflow-x: visible; }
+.rounded { border-radius: 0.25rem; }
+.border { border: 1px solid; }
+.border-b { border-bottom: 1px solid; }
+.border-t { border-top: 1px solid; }
+.max-w-4xl { max-width: 56rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.transition-colors { transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out; }
+
+/* GitHub color classes */
+.bg-github-bg { background-color: #0d1117; }
+.bg-github-surface { background-color: #161b22; }
+.bg-github-border { background-color: #30363d; }
+.bg-github-accent { background-color: #58a6ff; }
+.text-github-text { color: #c9d1d9; }
+.text-github-muted { color: #8b949e; }
+.text-white { color: white; }
+.border-github-border { border-color: #30363d; }
+.border-github-accent { border-color: #58a6ff; }
+
+/* Hover states */
+.hover\:bg-github-border:hover { background-color: var(--color-gray-700); }
+.hover\:bg-blue-600:hover { background-color: var(--color-gray-700); }
+.hover\:border-github-accent:hover { border-color: var(--color-gray-600); }
+
+/* Focus states */
+.focus\:outline-none:focus { outline: none; }
+.focus\:border-github-accent:focus { border-color: #58a6ff; }
+
+/* TipTap Editor Styles - CENTRALIZADO */
+.ProseMirror {
+  outline: none;
+  padding: 2rem;
+  min-height: 100%;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #c9d1d9;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Emojis e caracteres especiais */
+.ProseMirror .emoji {
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  font-weight: normal;
+  display: inline;
+}
+
+/* Divs centralizadas */
+.ProseMirror div[align="center"] {
+  text-align: center;
+  margin: 1em 0;
+}
+
+/* Highlight.js theme para code blocks */
+.hljs {
+  color: #c9d1d9;
+  background: transparent;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section,
+.hljs-link {
+  color: #ff7b72;
+}
+
+.hljs-function .hljs-keyword {
+  color: #d2a8ff;
+}
+
+.hljs-string,
+.hljs-title,
+.hljs-name,
+.hljs-type,
+.hljs-attribute,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition,
+.hljs-variable,
+.hljs-template-tag,
+.hljs-template-variable {
+  color: #a5d6ff;
+}
+
+.hljs-comment,
+.hljs-quote,
+.hljs-deletion,
+.hljs-meta {
+  color: #8b949e;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-type,
+.hljs-name,
+.hljs-strong {
+  font-weight: bold;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  color: #c9d1d9;
+  border-bottom: 1px solid #30363d;
+  padding-bottom: 0.5rem;
+}
+
+.ProseMirror h1:first-child {
+  margin-top: 0;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem 0;
+  color: #c9d1d9;
+  border-bottom: 1px solid #30363d;
+  padding-bottom: 0.3rem;
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.5rem 0;
+  color: #c9d1d9;
+}
+
+.ProseMirror p {
+  margin: 0.5rem 0;
+}
+
+.ProseMirror p:first-child {
+  margin-top: 0;
+}
+
+/* Preservar espaçamento de parágrafos */
+.ProseMirror p.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Parágrafos sem margem quando são o primeiro/último */
+.ProseMirror p:first-child {
+  margin-top: 0;
+}
+
+.ProseMirror p:last-child {
+  margin-bottom: 0;
+}
+
+/* Imagens no editor */
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Badges do shields.io e similares */
+.ProseMirror img[src*="shields.io"],
+.ProseMirror img[src*="badge"],
+.ProseMirror img[alt*="badge"],
+.ProseMirror img[alt*="Badge"] {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0.25rem;
+  height: auto;
+  max-height: 28px;
+}
+
+.ProseMirror ul, .ProseMirror ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.ProseMirror li {
+  margin: 0.25rem 0;
+}
+
+/* Override TipTap list styles */
+.ProseMirror ul.list-disc {
+  list-style-type: disc;
+}
+
+.ProseMirror ol.list-decimal {
+  list-style-type: decimal;
+}
+
+.ProseMirror li.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #30363d;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: #8b949e;
+  font-style: italic;
+}
+
+.ProseMirror code {
+  background: #161b22;
+  color: #e06c75;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-family: Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Override para código inline com classe específica */
+.ProseMirror code.bg-gray-800 {
+  background: #161b22;
+  color: #e06c75;
+}
+
+.ProseMirror pre {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  font-family: Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Override para code blocks com classe específica */
+.ProseMirror pre.bg-gray-900 {
+  background: #0d1117;
+  border: 1px solid #30363d;
+}
+
+.ProseMirror pre code {
+  background: transparent;
+  color: #c9d1d9;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.ProseMirror table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+  width: 100%;
+}
+
+.ProseMirror table td,
+.ProseMirror table th {
+  border: 1px solid #30363d;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.ProseMirror table th {
+  background: #161b22;
+  font-weight: 600;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.ProseMirror a {
+  color: #58a6ff;
+  text-decoration: none;
+}
+
+.ProseMirror a:hover {
+  text-decoration: underline;
+}
+
+.ProseMirror hr {
+  border: none;
+  border-top: 1px solid #30363d;
+  margin: 2rem 0;
+}
+
+/* Task list styles */
+.ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  margin: 0.25rem 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li > label {
+  flex: 0 0 auto;
+  margin-right: 0.5rem;
+  user-select: none;
+}
+
+.ProseMirror ul[data-type="taskList"] li > div {
+  flex: 1 1 auto;
+}
+
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"] {
+  margin: 0;
+}
+
+/* Centralizar conteúdo quando especificado */
+.ProseMirror [align="center"],
+.ProseMirror div[style*="text-align: center"] {
+  text-align: center;
+}
+
+/* Melhor renderização de badges em linha */
+.ProseMirror p img[src*="shields.io"] {
+  display: inline;
+  vertical-align: text-bottom;
+  margin: 0 2px;
+}
+
+/* Floating menu styles */
+.floating-menu {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  display: flex;
+  gap: 0.25rem;
+  z-index: 50;
+}
+
+.floating-menu button {
+  padding: 0.5rem;
+  border: none;
+  background: transparent;
+  color: #c9d1d9;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.floating-menu button:hover {
+  background: #30363d;
+}
+
+.floating-menu button.is-active {
+  background: #58a6ff;
+  color: white;
+}
+
+/* Bubble menu styles */
+.bubble-menu {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  display: flex;
+  gap: 0.25rem;
+  z-index: 1000;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  background: rgba(22, 27, 34, 0.95);
+}
+
+.bubble-menu .separator {
+  width: 1px;
+  height: 24px;
+  background-color: #30363d;
+  margin: 0 0.25rem;
+}
+
+.bubble-menu button {
+  padding: 0.4rem 0.6rem;
+  border: none;
+  background: transparent;
+  color: #c9d1d9;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  min-width: 32px;
+  min-height: 32px;
+  position: relative;
+}
+
+.bubble-menu button:after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+  background: rgba(88, 166, 255, 0.1);
+  pointer-events: none;
+}
+
+.bubble-menu button:hover {
+  background: #30363d;
+}
+
+.bubble-menu button.is-active {
+  background: #58a6ff;
+  color: white;
+}
+
+/* Command palette */
+.command-palette {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  width: 90%;
+  max-width: 500px;
+  max-height: 400px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.command-palette-input {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background: transparent;
+  color: #c9d1d9;
+  font-size: 1rem;
+  outline: none;
+  border-bottom: 1px solid #30363d;
+}
+
+.command-palette-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.command-palette-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: none;
+  background: transparent;
+  color: #c9d1d9;
+  width: 100%;
+  text-align: left;
+  transition: background 0.1s;
+}
+
+.command-palette-item:hover,
+.command-palette-item.selected {
+  background: #30363d;
+}
+
+.command-palette-item > svg:first-child {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.command-palette-item-content {
+  flex: 1;
+}
+
+.command-palette-item-title {
+  font-weight: 500;
+  margin-bottom: 0.125rem;
+}
+
+.command-palette-item-description {
+  font-size: 0.875rem;
+  color: #8b949e;
+}
+
+/* Panel styles */
+.w-1 {
+  width: 0.25rem;
+}
+
+/* Placeholder when editor is empty */
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: "Start writing your README...";
+  float: left;
+  color: #8b949e;
+  pointer-events: none;
+  height: 0;
+  font-size: 18px;
+}
+
+/* Visual GitHub features */
+.ProseMirror kbd {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-family: Monaco, Consolas, monospace;
+  color: #c9d1d9;
+}
+
+.ProseMirror details {
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 0;
+  margin: 16px 0;
+  background: #161b22;
+  overflow: hidden;
+}
+
+.ProseMirror summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 16px;
+  color: #58a6ff;
+  background: #0d1117;
+  border-bottom: 1px solid #30363d;
+  user-select: none;
+}
+
+.ProseMirror summary:hover {
+  background: #161b22;
+}
+
+.ProseMirror details[open] summary {
+  border-bottom: 1px solid #30363d;
+}
+
+.ProseMirror details > *:not(summary) {
+  padding: 16px;
+}
+
+.ProseMirror sup {
+  font-size: 0.75em;
+  color: #58a6ff;
+}
+
+/* Mermaid diagrams visual styling */
+.ProseMirror pre[data-type="mermaid"] {
+  background: #161b22;
+  border: 2px solid #58a6ff;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  color: #58a6ff;
+}
+
+/* Math expressions */
+.ProseMirror .math {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  padding: 8px;
+  font-family: "Times New Roman", serif;
+  color: #c9d1d9;
+  text-align: center;
+}
+
+/* Command palette floating button */
+.fixed { position: fixed; }
+.bottom-6 { bottom: 1.5rem; }
+.right-6 { right: 1.5rem; }
+.z-50 { z-index: 50; }
+.w-12 { width: 3rem; }
+.h-12 { height: 3rem; }
+.rounded-full { border-radius: 9999px; }
+.shadow-lg { box-shadow: 0 10px 15px -3px rgba(88, 166, 255, 0.3); }
+
+/* Markdown view styles */
+.markdown-view {
+  font-family: Monaco, Consolas, 'Courier New', monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Fixes para renderização GitHub-like */
+.ProseMirror pre {
+  font-variant-ligatures: none;
+  -webkit-font-feature-settings: "liga" 0, "calt" 0;
+  font-feature-settings: "liga" 0, "calt" 0;
+}
+
+/* Forçar badges em linha */
+.ProseMirror p:has(> img[src*="shields.io"]:first-child) {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  margin: 1em 0;
+  overflow-x: auto;
+}
+
+/* Garantir divs centralizadas funcionem */
+.ProseMirror div[style*="text-align: center"] p {
+  text-align: center;
+}
+
+/* Melhor suporte para caracteres unicode e emojis */
+.ProseMirror {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+}
+
+/* Clean editor styles */
+.ProseMirror > * {
+  position: relative;
+}
+
+/* GitHub Alerts styles */
+.github-alert {
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 6px;
+  border-left: 4px solid;
+}
+
+.github-alert p:first-child {
+  margin-top: 0;
+}
+
+.github-alert p:last-child {
+  margin-bottom: 0;
+}
+
+.github-alert-note {
+  background-color: #0969da1a;
+  border-left-color: #0969da;
+}
+
+.github-alert-tip {
+  background-color: #1a7f371a;
+  border-left-color: #1a7f37;
+}
+
+.github-alert-important {
+  background-color: #8250df1a;
+  border-left-color: #8250df;
+}
+
+.github-alert-warning {
+  background-color: #9a67001a;
+  border-left-color: #9a6700;
+}
+
+.github-alert-caution {
+  background-color: #d1242f1a;
+  border-left-color: #d1242f;
+}
+
+/* Mermaid diagram container */
+.mermaid-diagram {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 16px 0;
+  overflow-x: auto;
+}
+
+/* Collapsible section styles */
+.collapsible-section {
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  margin: 16px 0;
+  background: #161b22;
+}
+
+.collapsible-header {
+  padding: 16px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.collapsible-content {
+  padding: 0 16px 16px;
+  border-top: 1px solid #30363d;
+}
+
+/* Badge editor styles */
+.badge-editor {
+  display: inline-block;
+  position: relative;
+}
+
+.badge-editor:hover .badge-edit-button {
+  opacity: 1;
+}
+
+.badge-edit-button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+/* Table editor enhancements */
+.table-controls {
+  position: absolute;
+  top: -32px;
+  right: 0;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.ProseMirror table:hover .table-controls {
+  opacity: 1;
+}
+
+.table-control-button {
+  padding: 4px 8px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #c9d1d9;
+}
+
+.table-control-button:hover {
+  background: #30363d;
+}
+
+/* Toolbar styles */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  flex-wrap: wrap;
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: #30363d;
+  margin: 0 8px;
+}
+
+.toolbar button {
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: #c9d1d9;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  min-width: 32px;
+  height: 32px;
+}
+
+.toolbar button:hover {
+  background: #30363d;
+}
+
+.toolbar button.is-active {
+  background: #1f6feb;
+  color: white;
+}
+
+.toolbar button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toolbar button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Mantine Theme Overrides */
+.mantine-Modal-root {
+  color: #c9d1d9;
+}
+
+.mantine-Modal-header {
+  background-color: #161b22;
+  border-bottom: 1px solid #30363d;
+  padding: 1rem 1.5rem;
+}
+
+.mantine-Modal-body {
+  background-color: #161b22;
+  padding: 1.5rem;
+}
+
+.mantine-Modal-content {
+  background-color: #161b22;
+  border: 1px solid #30363d;
+}
+
+.mantine-Modal-close {
+  color: #8b949e;
+}
+
+.mantine-Modal-close:hover {
+  color: #c9d1d9;
+  background-color: #30363d;
+}
+
+.mantine-Input-input {
+  background-color: #0d1117;
+  border-color: #30363d;
+  color: #c9d1d9;
+}
+
+.mantine-Input-input:focus {
+  border-color: #58a6ff;
+}
+
+.mantine-Input-input::placeholder {
+  color: #6e7681;
+}
+
+.mantine-Input-label {
+  color: #c9d1d9;
+  margin-bottom: 0.25rem;
+}
+
+/* Simple Drag and Drop Styles */
+.ProseMirror {
+  position: relative;
+  padding-left: 40px !important;
+}
+
+/* Container for all drag handles */
+.simple-drag-handles {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Individual drag handle */
+.drag-handle-simple {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: #8b949e;
+}
+
+.drag-handle-simple:hover {
+  opacity: 1 !important;
+  color: #c9d1d9;
+}
+
+/* Show handles when hovering over editor */
+.ProseMirror:hover .drag-handle-simple {
+  opacity: 0.5;
+}
+
+/* Style for the dots */
+.drag-dots svg {
+  display: block;
+}
+
+/* Block being dragged */
+.ProseMirror > .dragging {
+  opacity: 0.4;
+  background: rgba(88, 166, 255, 0.05);
+  border-radius: 4px;
+}
+
+/* Drop indicator */
+.ProseMirror > .drag-over {
+  position: relative;
+}
+
+.ProseMirror > .drag-over::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -40px;
+  right: 0;
+  height: 2px;
+  background: #2ea043;
+  z-index: 10;
+}
+
+.ProseMirror > .drag-over-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: -40px;
+  right: 0;
+  height: 2px;
+  background: #2ea043;
+  z-index: 10;
+}
