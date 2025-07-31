@@ -78,7 +78,7 @@ export default function TableModal({ opened, onClose, onInsert }: TableModalProp
                       onClick={() => {
                         setRows(row + 1);
                         setCols(col + 1);
-                        handleSubmit(new Event('submit') as any);
+                        handleSubmit({ preventDefault: () => {} } as React.FormEvent);
                       }}
                       style={{
                         width: '26px',

@@ -6,7 +6,7 @@ export const ImprovedHardBreak = Extension.create({
   addKeyboardShortcuts() {
     return {
       'Shift-Enter': ({ editor }) => {
-        const { state, view } = editor;
+        const { state } = editor;
         const { $from } = state.selection;
         
         // Check if we're in a code block

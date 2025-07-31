@@ -1,6 +1,14 @@
 import { Extension } from '@tiptap/core';
 import { Plugin } from '@tiptap/pm/state';
 
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    preventAutoScroll: {
+      focusWithoutScroll: () => ReturnType;
+    };
+  }
+}
+
 export const PreventAutoScroll = Extension.create({
   name: 'preventAutoScroll',
 
@@ -28,8 +36,8 @@ export const PreventAutoScroll = Extension.create({
   addCommands() {
     return {
       // Custom focus command that doesn't scroll
-      focusWithoutScroll: () => ({ editor, view }) => {
-        const { from, to } = editor.state.selection;
+      focusWithoutScroll: () => ({ editor }) => {
+        const { view } = editor;
         
         // Save current scroll position
         const scrollY = window.scrollY;
