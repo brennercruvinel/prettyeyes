@@ -3,9 +3,8 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
 import remarkHtml from "remark-html";
+import DOMPurify from "dompurify";
 import type { PreviewProps } from "../../types/editor.types";
-// TODO: [Security] Import DOMPurify for XSS protection
-// import DOMPurify from 'dompurify';
 
 export default function Preview({ markdown, className = "" }: PreviewProps) {
   const [html, setHtml] = useState("");
@@ -16,9 +15,7 @@ export default function Preview({ markdown, className = "" }: PreviewProps) {
         const result = await unified()
           .use(remarkParse)
           .use(remarkGfm)
-          // TODO: [Security] Enable sanitization - currently allows XSS attacks
-          // Change to: .use(remarkHtml, { sanitize: true })
-          .use(remarkHtml, { sanitize: false })
+          .use(remarkHtml, { sanitize: true })
           .process(markdown);
 
         setHtml(result.toString());
@@ -34,11 +31,9 @@ export default function Preview({ markdown, className = "" }: PreviewProps) {
     <div className={`h-full bg-[#0d1117] overflow-hidden ${className}`}>
       <div className="h-full overflow-y-auto">
         <div className="px-8 py-6 max-w-4xl mx-auto">
-          {/* TODO: [Security] Critical XSS vulnerability - sanitize HTML before rendering
-              Replace with: dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} */}
           <div
             className="markdown-body prose prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ __html: html }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}
             style={{
               color: "#c9d1d9",
               fontSize: "16px",

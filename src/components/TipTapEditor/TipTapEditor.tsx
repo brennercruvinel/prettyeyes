@@ -16,7 +16,8 @@ import Gapcursor from "@tiptap/extension-gapcursor";
 import { SimpleDragDrop } from "./extensions/SimpleDragDrop";
 import { PreventAutoScroll } from "./extensions/PreventAutoScroll";
 import { ImprovedHardBreak } from "./extensions/ImprovedHardBreak";
-import { useState, useEffect } from "react";
+import { useDebouncedCallback } from "@mantine/hooks";
+import { useState, useEffect, useCallback } from "react";
 import CommandPalette from "./CommandPalette";
 import CustomBubbleMenu from "./CustomBubbleMenu";
 import Toolbar from "./Toolbar";
@@ -300,6 +301,15 @@ export default function TipTapEditor({
   const [showCollapsibleModal, setShowCollapsibleModal] = useState(false);
   const [showKeyboardModal, setShowKeyboardModal] = useState(false);
 
+  // Debounced markdown conversion for performance
+  const debouncedMarkdownUpdate = useDebouncedCallback(
+    (html: string) => {
+      const markdown = turndownService.turndown(html);
+      onMarkdownChange?.(markdown);
+    },
+    300 // 300ms delay
+  );
+
   const editor = useEditor({
     autofocus: false,
     extensions: [
@@ -426,12 +436,10 @@ export default function TipTapEditor({
       }, 100);
     },
     onUpdate: ({ editor }) => {
-      // TODO: [Performance] Add debouncing - turndown conversion runs on every keystroke
-      // Consider using useDebouncedCallback or throttling updates
       const html = editor.getHTML();
-      const markdown = turndownService.turndown(html);
       onChange?.(html);
-      onMarkdownChange?.(markdown);
+      // Debounced markdown conversion to improve performance
+      debouncedMarkdownUpdate(html);
     },
     editorProps: {
       attributes: {
@@ -525,15 +533,8 @@ export default function TipTapEditor({
   // Handle command palette
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // TODO: [Cleanup] Remove debug console.log statements before production
-      console.log('Key pressed:', e.key, 'metaKey:', e.metaKey, 'ctrlKey:', e.ctrlKey);
-      
       // Abrir com / ou Cmd+K/Ctrl+K
-      console.log('Editor exists:', !!editor, 'Is focused:', editor?.isFocused);
-      
       if (editor) {
-        console.log('Editor is focused:', editor.isFocused);
-        
         if (e.key === "/" && !e.metaKey && !e.ctrlKey) {
           const { $from } = editor.state.selection;
           const textBefore = $from.nodeBefore?.textContent || "";
@@ -541,7 +542,6 @@ export default function TipTapEditor({
           // Só abrir command palette se não estiver no meio de um texto
           if (!textBefore || textBefore.endsWith(" ") || textBefore === "") {
             e.preventDefault();
-            console.log('Opening command palette with /');
             setShowCommandPalette(true);
           }
         }
@@ -550,12 +550,10 @@ export default function TipTapEditor({
       // Sempre permitir Cmd/Ctrl+K, mesmo sem foco
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        console.log('Opening command palette with Cmd/Ctrl+K');
         setShowCommandPalette(true);
       }
 
       if (e.key === "Escape") {
-        console.log('Closing command palette');
         setShowCommandPalette(false);
       }
     };

@@ -1,8 +1,6 @@
 import { Extension } from '@tiptap/core';
 import { Plugin } from '@tiptap/pm/state';
 
-// TODO: [Memory Leak] Add cleanup for DOM event listeners in destroy() method
-// Current implementation doesn't remove dragstart, dragend, dragover, drop listeners
 export const SimpleDragDrop = Extension.create({
   name: 'simpleDragDrop',
 
@@ -83,7 +81,8 @@ export const SimpleDragDrop = Extension.create({
             });
           };
 
-          editorView.dom.addEventListener('dragover', (e) => {
+          // Store event handlers for cleanup
+          const dragOverHandler = (e: DragEvent) => {
             e.preventDefault();
             if (!e.dataTransfer) return;
             
@@ -109,9 +108,9 @@ export const SimpleDragDrop = Extension.create({
                 block.classList.add('drag-over-bottom');
               }
             }
-          });
+          };
 
-          editorView.dom.addEventListener('drop', (e) => {
+          const dropHandler = (e: DragEvent) => {
             e.preventDefault();
             if (!e.dataTransfer) return;
             
@@ -171,13 +170,20 @@ export const SimpleDragDrop = Extension.create({
             });
             
             setTimeout(updateHandles, 0);
-          });
+          };
+
+          // Add event listeners
+          editorView.dom.addEventListener('dragover', dragOverHandler);
+          editorView.dom.addEventListener('drop', dropHandler);
 
           updateHandles();
           
           return {
             update: updateHandles,
             destroy: () => {
+              // Remove event listeners to prevent memory leaks
+              editorView.dom.removeEventListener('dragover', dragOverHandler);
+              editorView.dom.removeEventListener('drop', dropHandler);
               handleHolder.remove();
             }
           };

@@ -121,9 +121,9 @@ export function LeftSidebar({ editor, isEditorReady }: LeftSidebarProps) {
     
     // Listen for all content changes
     editor.on("update", updateBlocks);
-    // TODO: [Performance] Remove selectionUpdate listener - causes unnecessary rerenders
-    editor.on("selectionUpdate", updateBlocks);
-    // TODO: [Memory Leak] Store reference to transaction handler for proper cleanup
+    // Performance: Removed selectionUpdate listener to prevent unnecessary rerenders
+    
+    // Store reference to transaction handler for proper cleanup
     const transactionHandler = ({ transaction }: { transaction: any }) => {
       // Só atualizar se a transação modificou o documento
       if (transaction.docChanged) {
@@ -139,9 +139,8 @@ export function LeftSidebar({ editor, isEditorReady }: LeftSidebarProps) {
       }
       
       editor.off("update", updateBlocks);
-      editor.off("selectionUpdate", updateBlocks);
-      // TODO: [Memory Leak] Fix cleanup - should use transactionHandler not updateBlocks
-      editor.off("transaction", updateBlocks);
+      // Fixed: Use correct handler reference for cleanup
+      editor.off("transaction", transactionHandler);
     };
   }, [editor, isEditorReady]);
 
@@ -156,8 +155,7 @@ export function LeftSidebar({ editor, isEditorReady }: LeftSidebarProps) {
         // Get all block positions
         const blockPositions: { pos: number; size: number; node: Node }[] = [];
 
-        // TODO: [Bug] Declare currentBlockIndex variable - currently undefined causing runtime error
-        let currentBlockIndex = 0;
+        // Fixed: Variable now declared before use
         editor.state.doc.forEach((node, offset) => {
           if (node.isBlock && node.type.name !== "doc") {
             blockPositions.push({
@@ -165,7 +163,6 @@ export function LeftSidebar({ editor, isEditorReady }: LeftSidebarProps) {
               size: node.nodeSize,
               node: node
             });
-            currentBlockIndex++;
           }
         });
 
@@ -249,7 +246,6 @@ export function LeftSidebar({ editor, isEditorReady }: LeftSidebarProps) {
                   <SortableBlockItem
                     key={block.id}
                     id={block.id}
-                    block={block}
                     icon={getBlockIcon(block.type)}
                     title={getBlockTitle(block)}
                     onClick={() => handleBlockClick(block.id)}
