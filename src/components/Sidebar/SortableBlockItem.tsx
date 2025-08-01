@@ -12,7 +12,7 @@ interface Block {
 
 interface SortableBlockItemProps {
   id: string;
-  block: Block;
+  block: Block; // TODO: [Cleanup] Remove unused block parameter - not used in component
   icon: ReactNode;
   title: string;
   onClick: () => void;

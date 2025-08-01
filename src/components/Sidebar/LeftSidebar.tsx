@@ -121,13 +121,16 @@ export function LeftSidebar({ editor, isEditorReady }: LeftSidebarProps) {
     
     // Listen for all content changes
     editor.on("update", updateBlocks);
+    // TODO: [Performance] Remove selectionUpdate listener - causes unnecessary rerenders
     editor.on("selectionUpdate", updateBlocks);
-    editor.on("transaction", ({ transaction }) => {
+    // TODO: [Memory Leak] Store reference to transaction handler for proper cleanup
+    const transactionHandler = ({ transaction }: { transaction: any }) => {
       // Só atualizar se a transação modificou o documento
       if (transaction.docChanged) {
         updateBlocks();
       }
-    });
+    };
+    editor.on("transaction", transactionHandler);
 
     return () => {
       // Limpar timeout pendente
@@ -137,6 +140,7 @@ export function LeftSidebar({ editor, isEditorReady }: LeftSidebarProps) {
       
       editor.off("update", updateBlocks);
       editor.off("selectionUpdate", updateBlocks);
+      // TODO: [Memory Leak] Fix cleanup - should use transactionHandler not updateBlocks
       editor.off("transaction", updateBlocks);
     };
   }, [editor, isEditorReady]);
@@ -152,6 +156,8 @@ export function LeftSidebar({ editor, isEditorReady }: LeftSidebarProps) {
         // Get all block positions
         const blockPositions: { pos: number; size: number; node: Node }[] = [];
 
+        // TODO: [Bug] Declare currentBlockIndex variable - currently undefined causing runtime error
+        let currentBlockIndex = 0;
         editor.state.doc.forEach((node, offset) => {
           if (node.isBlock && node.type.name !== "doc") {
             blockPositions.push({
