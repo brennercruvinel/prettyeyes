@@ -1,12 +1,6 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Editor } from '@tiptap/react';
-
-interface EditorContextType {
-  editor: Editor | null;
-  setEditor: (editor: Editor | null) => void;
-}
-
-const EditorContext = createContext<EditorContextType | undefined>(undefined);
+import { EditorContext } from './EditorContextInternal';
 
 export function EditorProvider({ children }: { children: React.ReactNode }) {
   const [editor, setEditor] = useState<Editor | null>(null);
@@ -20,12 +14,4 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
       {children}
     </EditorContext.Provider>
   );
-}
-
-export function useEditorContext() {
-  const context = useContext(EditorContext);
-  if (!context) {
-    throw new Error('useEditorContext must be used within EditorProvider');
-  }
-  return context;
 }

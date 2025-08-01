@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Editor } from "@tiptap/react";
+import type { Node } from "@tiptap/pm/model";
 import {
   DndContext,
   closestCenter,
@@ -99,7 +100,7 @@ export function LeftSidebar({ editor, isEditorReady }: LeftSidebarProps) {
         const newBlocks: Block[] = [];
         let blockId = 0;
 
-        editor.state.doc.forEach((node, _offset) => {
+        editor.state.doc.forEach((node) => {
           if (node.isBlock && node.type.name !== "doc") {
             const block: Block = {
               id: `block-${blockId++}`,
@@ -149,8 +150,7 @@ export function LeftSidebar({ editor, isEditorReady }: LeftSidebarProps) {
 
       if (oldIndex !== -1 && newIndex !== -1 && editor) {
         // Get all block positions
-        const blockPositions: { pos: number; size: number; node: any }[] = [];
-        let currentBlockIndex = 0;
+        const blockPositions: { pos: number; size: number; node: Node }[] = [];
 
         editor.state.doc.forEach((node, offset) => {
           if (node.isBlock && node.type.name !== "doc") {

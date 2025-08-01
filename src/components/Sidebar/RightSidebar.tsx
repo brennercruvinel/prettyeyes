@@ -5,13 +5,14 @@ import {
   FiTerminal, FiPackage, FiGitBranch, FiLink,
   FiLayout, FiUsers, FiTool, FiBook
 } from "react-icons/fi";
+import type { IconType } from "react-icons";
 import { processMarkdownToHTML } from "../../utils/markdownProcessor";
 
 interface Template {
   id: string;
   name: string;
   category: string;
-  icon: any;
+  icon: IconType;
   content: string;
   description?: string;
 }
