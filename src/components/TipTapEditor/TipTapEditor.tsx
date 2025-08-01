@@ -1,4 +1,4 @@
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
@@ -6,9 +6,7 @@ import { Table } from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableHeader from "@tiptap/extension-table-header";
 import TableCell from "@tiptap/extension-table-cell";
-import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
-import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import { Color } from "@tiptap/extension-color";
 import { TextStyle } from "@tiptap/extension-text-style";
@@ -48,6 +46,7 @@ interface TipTapEditorProps {
   htmlContent?: string;
   onChange?: (htmlContent: string) => void;
   onMarkdownChange?: (markdownContent: string) => void;
+  onEditorReady?: (editor: Editor) => void;
 }
 
 
@@ -284,6 +283,7 @@ export default function TipTapEditor({
   htmlContent,
   onChange,
   onMarkdownChange,
+  onEditorReady,
 }: TipTapEditorProps) {
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
@@ -302,6 +302,15 @@ export default function TipTapEditor({
       StarterKit.configure({
         gapcursor: false, // Desabilitar gapcursor do StarterKit
         // codeBlock: false, // Vamos usar CodeBlockLowlight ao invés
+        link: {
+          openOnClick: false,
+          autolink: true,
+          defaultProtocol: "https",
+          HTMLAttributes: {
+            class: "text-blue-400 hover:text-blue-300 underline cursor-pointer",
+          },
+          validate: (href: string) => /^https?:\/\//.test(href),
+        },
         bulletList: {
           keepMarks: true,
           keepAttributes: false,
@@ -383,15 +392,6 @@ export default function TipTapEditor({
           class: "tiptap-table-cell",
         },
       }),
-      Link.configure({
-        openOnClick: false,
-        autolink: true,
-        defaultProtocol: "https",
-        HTMLAttributes: {
-          class: "text-blue-400 hover:text-blue-300 underline cursor-pointer",
-        },
-        validate: href => /^https?:\/\//.test(href),
-      }),
       Image.configure({
         inline: true,
         allowBase64: true,
@@ -399,7 +399,6 @@ export default function TipTapEditor({
           class: "inline",
         },
       }),
-      Underline,
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
@@ -416,6 +415,12 @@ export default function TipTapEditor({
       ImprovedHardBreak,
     ],
     content: "",
+    onCreate: ({ editor }) => {
+      // Pequeno delay para garantir que o editor esteja completamente montado
+      setTimeout(() => {
+        onEditorReady?.(editor);
+      }, 100);
+    },
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
       const markdown = turndownService.turndown(html);
@@ -482,21 +487,27 @@ export default function TipTapEditor({
     },
   });
 
-  // Processar conteúdo inicial apenas na primeira vez
+  // Processar conteúdo inicial
   useEffect(() => {
-    if (content && editor && !editor.isDestroyed) {
-      // Detectar se é HTML ou Markdown
-      if (isHTML(content)) {
-        // É HTML, processar e inserir
-        const processedHtml = processHTMLContent(content);
-        editor.commands.setContent(processedHtml);
-      } else {
-        // Assumir que é Markdown
-        const cleanHTML = processMarkdownToHTML(content);
-        editor.commands.setContent(cleanHTML);
+    if (editor && !editor.isDestroyed) {
+      if (content) {
+        // Detectar se é HTML ou Markdown
+        if (isHTML(content)) {
+          // É HTML, processar e inserir
+          const processedHtml = processHTMLContent(content);
+          editor.commands.setContent(processedHtml);
+        } else {
+          // Assumir que é Markdown
+          const cleanHTML = processMarkdownToHTML(content);
+          editor.commands.setContent(cleanHTML);
+        }
+      }
+      // Garantir que onEditorReady seja chamado após o editor estar pronto
+      if (onEditorReady && editor.view) {
+        onEditorReady(editor);
       }
     }
-  }, [content, editor]);
+  }, [content, editor, onEditorReady]);
 
   // Manter o conteúdo HTML quando voltar do modo markdown
   useEffect(() => {

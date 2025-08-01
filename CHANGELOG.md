@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Dual Sidebar System** for enhanced productivity
+  - **Left Sidebar**: Real-time document structure visualization with drag-and-drop reordering
+  - **Right Sidebar**: Quick template insertion with categorized README sections
+- Interactive document navigation - click any block to jump to it
+- Template library with 18+ pre-built sections (Installation, Usage, Contributing, etc.)
+- Advanced templates including API Reference, Tech Stack, and Roadmap
+- Collapsible sections support for better content organization
+- Real-time synchronization between editor and document structure
+- @dnd-kit integration for smooth drag-and-drop experience
+- useEditorState hook for robust editor state management
+- Markdown to HTML processor with GitHub-flavored markdown support
 - Mantine UI integration for improved modal UX/UI
 - Drag and drop functionality for block reordering
 - Dark theme optimizations for GitHub-style appearance
@@ -20,6 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Issue and PR templates
 
 ### Changed
+- Enhanced editor architecture to support multiple synchronized views
+- Improved content detection and insertion with debounced updates
+- Optimized performance with efficient block tracking algorithms
 - Refactored all modals to use Mantine components
 - Improved code organization and removed redundant comments
 - Updated dependencies to latest versions
@@ -27,6 +41,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Import/export buttons now follow monochrome design system
 
 ### Fixed
+- Editor synchronization issues between sidebars
+- TipTap v3 compatibility with duplicate extension errors
+- "Editor view is not available" errors with safe state management
+- Template insertion not triggering document structure updates
+- TypeScript errors with proper timer type definitions
 - Modal positioning and responsiveness issues
 - Drag handle visibility and interaction bugs
 - Import/export functionality edge cases
