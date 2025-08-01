@@ -7,6 +7,8 @@ import { LeftSidebar } from "./components/Sidebar/LeftSidebar";
 import { RightSidebar } from "./components/Sidebar/RightSidebar";
 import { useEditorState } from "./hooks/useEditorState";
 
+// TODO: [Error Handling] Wrap App in React Error Boundary to catch runtime errors
+// Create ErrorBoundary component to show fallback UI on crashes
 function App() {
   const [fileName, setFileName] = useState("README.md");
   const [content, setContent] = useState("");

@@ -278,6 +278,10 @@ const processMarkdownToHTML = (markdown: string): string => {
   }
 }
 
+// TODO: [Refactor] This component is 809 lines - split into smaller components:
+// - Extract modal management to custom hook
+// - Move markdown processing to separate utility
+// - Create separate components for toolbar sections
 export default function TipTapEditor({
   content = "",
   htmlContent,
@@ -422,6 +426,8 @@ export default function TipTapEditor({
       }, 100);
     },
     onUpdate: ({ editor }) => {
+      // TODO: [Performance] Add debouncing - turndown conversion runs on every keystroke
+      // Consider using useDebouncedCallback or throttling updates
       const html = editor.getHTML();
       const markdown = turndownService.turndown(html);
       onChange?.(html);
@@ -519,6 +525,7 @@ export default function TipTapEditor({
   // Handle command palette
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // TODO: [Cleanup] Remove debug console.log statements before production
       console.log('Key pressed:', e.key, 'metaKey:', e.metaKey, 'ctrlKey:', e.ctrlKey);
       
       // Abrir com / ou Cmd+K/Ctrl+K
