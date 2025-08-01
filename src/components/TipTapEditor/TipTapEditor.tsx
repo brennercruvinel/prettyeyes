@@ -17,7 +17,7 @@ import { SimpleDragDrop } from "./extensions/SimpleDragDrop";
 import { PreventAutoScroll } from "./extensions/PreventAutoScroll";
 import { ImprovedHardBreak } from "./extensions/ImprovedHardBreak";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import CommandPalette from "./CommandPalette";
 import CustomBubbleMenu from "./CustomBubbleMenu";
 import Toolbar from "./Toolbar";

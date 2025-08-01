@@ -3,13 +3,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { FiMoreVertical } from "react-icons/fi";
 import type { ReactNode } from "react";
 
-interface Block {
-  id: string;
-  type: string;
-  content: string;
-  level?: number;
-}
-
 interface SortableBlockItemProps {
   id: string;
   icon: ReactNode;
