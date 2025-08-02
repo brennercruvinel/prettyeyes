@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Editor } from "@tiptap/react";
 import type { Node } from "@tiptap/pm/model";
+import type { Transaction } from "@tiptap/pm/state";
 import {
   DndContext,
   closestCenter,
@@ -124,7 +125,7 @@ export function LeftSidebar({ editor, isEditorReady }: LeftSidebarProps) {
     // Performance: Removed selectionUpdate listener to prevent unnecessary rerenders
     
     // Store reference to transaction handler for proper cleanup
-    const transactionHandler = ({ transaction }: { transaction: any }) => {
+    const transactionHandler = ({ transaction }: { transaction: Transaction }) => {
       // Só atualizar se a transação modificou o documento
       if (transaction.docChanged) {
         updateBlocks();
