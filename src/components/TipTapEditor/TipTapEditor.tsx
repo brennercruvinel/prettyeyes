@@ -1,4 +1,4 @@
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
@@ -6,9 +6,7 @@ import { Table } from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableHeader from "@tiptap/extension-table-header";
 import TableCell from "@tiptap/extension-table-cell";
-import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
-import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import { Color } from "@tiptap/extension-color";
 import { TextStyle } from "@tiptap/extension-text-style";
@@ -18,6 +16,7 @@ import Gapcursor from "@tiptap/extension-gapcursor";
 import { SimpleDragDrop } from "./extensions/SimpleDragDrop";
 import { PreventAutoScroll } from "./extensions/PreventAutoScroll";
 import { ImprovedHardBreak } from "./extensions/ImprovedHardBreak";
+import { useDebouncedCallback } from "@mantine/hooks";
 import { useState, useEffect } from "react";
 import CommandPalette from "./CommandPalette";
 import CustomBubbleMenu from "./CustomBubbleMenu";
@@ -48,6 +47,7 @@ interface TipTapEditorProps {
   htmlContent?: string;
   onChange?: (htmlContent: string) => void;
   onMarkdownChange?: (markdownContent: string) => void;
+  onEditorReady?: (editor: Editor) => void;
 }
 
 
@@ -279,11 +279,16 @@ const processMarkdownToHTML = (markdown: string): string => {
   }
 }
 
+// TODO: [Refactor] This component is 809 lines - split into smaller components:
+// - Extract modal management to custom hook
+// - Move markdown processing to separate utility
+// - Create separate components for toolbar sections
 export default function TipTapEditor({
   content = "",
   htmlContent,
   onChange,
   onMarkdownChange,
+  onEditorReady,
 }: TipTapEditorProps) {
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
@@ -296,12 +301,30 @@ export default function TipTapEditor({
   const [showCollapsibleModal, setShowCollapsibleModal] = useState(false);
   const [showKeyboardModal, setShowKeyboardModal] = useState(false);
 
+  // Debounced markdown conversion for performance
+  const debouncedMarkdownUpdate = useDebouncedCallback(
+    (html: string) => {
+      const markdown = turndownService.turndown(html);
+      onMarkdownChange?.(markdown);
+    },
+    300 // 300ms delay
+  );
+
   const editor = useEditor({
     autofocus: false,
     extensions: [
       StarterKit.configure({
         gapcursor: false, // Desabilitar gapcursor do StarterKit
         // codeBlock: false, // Vamos usar CodeBlockLowlight ao invés
+        link: {
+          openOnClick: false,
+          autolink: true,
+          defaultProtocol: "https",
+          HTMLAttributes: {
+            class: "text-blue-400 hover:text-blue-300 underline cursor-pointer",
+          },
+          validate: (href: string) => /^https?:\/\//.test(href),
+        },
         bulletList: {
           keepMarks: true,
           keepAttributes: false,
@@ -383,15 +406,6 @@ export default function TipTapEditor({
           class: "tiptap-table-cell",
         },
       }),
-      Link.configure({
-        openOnClick: false,
-        autolink: true,
-        defaultProtocol: "https",
-        HTMLAttributes: {
-          class: "text-blue-400 hover:text-blue-300 underline cursor-pointer",
-        },
-        validate: href => /^https?:\/\//.test(href),
-      }),
       Image.configure({
         inline: true,
         allowBase64: true,
@@ -399,7 +413,6 @@ export default function TipTapEditor({
           class: "inline",
         },
       }),
-      Underline,
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
@@ -416,11 +429,17 @@ export default function TipTapEditor({
       ImprovedHardBreak,
     ],
     content: "",
+    onCreate: ({ editor }) => {
+      // Pequeno delay para garantir que o editor esteja completamente montado
+      setTimeout(() => {
+        onEditorReady?.(editor);
+      }, 100);
+    },
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
-      const markdown = turndownService.turndown(html);
       onChange?.(html);
-      onMarkdownChange?.(markdown);
+      // Debounced markdown conversion to improve performance
+      debouncedMarkdownUpdate(html);
     },
     editorProps: {
       attributes: {
@@ -482,21 +501,27 @@ export default function TipTapEditor({
     },
   });
 
-  // Processar conteúdo inicial apenas na primeira vez
+  // Processar conteúdo inicial
   useEffect(() => {
-    if (content && editor && !editor.isDestroyed) {
-      // Detectar se é HTML ou Markdown
-      if (isHTML(content)) {
-        // É HTML, processar e inserir
-        const processedHtml = processHTMLContent(content);
-        editor.commands.setContent(processedHtml);
-      } else {
-        // Assumir que é Markdown
-        const cleanHTML = processMarkdownToHTML(content);
-        editor.commands.setContent(cleanHTML);
+    if (editor && !editor.isDestroyed) {
+      if (content) {
+        // Detectar se é HTML ou Markdown
+        if (isHTML(content)) {
+          // É HTML, processar e inserir
+          const processedHtml = processHTMLContent(content);
+          editor.commands.setContent(processedHtml);
+        } else {
+          // Assumir que é Markdown
+          const cleanHTML = processMarkdownToHTML(content);
+          editor.commands.setContent(cleanHTML);
+        }
+      }
+      // Garantir que onEditorReady seja chamado após o editor estar pronto
+      if (onEditorReady && editor.view) {
+        onEditorReady(editor);
       }
     }
-  }, [content, editor]);
+  }, [content, editor, onEditorReady]);
 
   // Manter o conteúdo HTML quando voltar do modo markdown
   useEffect(() => {
@@ -508,14 +533,8 @@ export default function TipTapEditor({
   // Handle command palette
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      console.log('Key pressed:', e.key, 'metaKey:', e.metaKey, 'ctrlKey:', e.ctrlKey);
-      
       // Abrir com / ou Cmd+K/Ctrl+K
-      console.log('Editor exists:', !!editor, 'Is focused:', editor?.isFocused);
-      
       if (editor) {
-        console.log('Editor is focused:', editor.isFocused);
-        
         if (e.key === "/" && !e.metaKey && !e.ctrlKey) {
           const { $from } = editor.state.selection;
           const textBefore = $from.nodeBefore?.textContent || "";
@@ -523,7 +542,6 @@ export default function TipTapEditor({
           // Só abrir command palette se não estiver no meio de um texto
           if (!textBefore || textBefore.endsWith(" ") || textBefore === "") {
             e.preventDefault();
-            console.log('Opening command palette with /');
             setShowCommandPalette(true);
           }
         }
@@ -532,12 +550,10 @@ export default function TipTapEditor({
       // Sempre permitir Cmd/Ctrl+K, mesmo sem foco
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        console.log('Opening command palette with Cmd/Ctrl+K');
         setShowCommandPalette(true);
       }
 
       if (e.key === "Escape") {
-        console.log('Closing command palette');
         setShowCommandPalette(false);
       }
     };

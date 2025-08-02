@@ -53,6 +53,8 @@ So I built **PrettyEyes** - an editor that renders exactly like GitHub, with eve
 🎨 **Rich Media** - Images, badges, tables without drama<br>
 ⚡ **Export Ready** - `.md`, `.html`, `.txt` - you choose<br>
 🧠 **Content Detection** - Paste anything, it fixes it<br>
+📝 **Document Structure** - Visual sidebar with drag-and-drop reordering<br>
+🎯 **Quick Templates** - One-click README sections insertion<br>
 
 ## 🚀 Getting Started
 
@@ -104,6 +106,20 @@ Because mouse is overrated:
 3. Download the `.md`
 4. Profit ✨
 
+### The New Sidebars
+
+**Left Sidebar - Document Structure**
+- See all your document sections at a glance
+- Drag and drop to reorder blocks
+- Click to jump to any section
+- Real-time updates as you type
+
+**Right Sidebar - Quick Templates**
+- Pre-built README sections
+- Installation, Usage, Contributing, License, etc.
+- Click to insert formatted templates
+- No more copy-pasting from other READMEs
+
 ## 🛠️ Tech Stack
 
 ### Choices I don't regret
@@ -117,6 +133,7 @@ Because mouse is overrated:
 - **Marked** - Markdown parser that doesn't lie
 - **Lowlight** - Syntax highlighting that actually works
 - **DOMPurify** - Because XSS is not my friend
+- **@dnd-kit** - Drag and drop that just works
 
 ## 📁 Project Structure
 
@@ -125,7 +142,12 @@ prettyeyes/
 ├── src/
 │   ├── components/
 │   │   ├── TipTapEditor/          # The engine
+│   │   ├── Sidebar/               # Document structure & templates
 │   │   └── Preview/               # Where magic becomes reality
+│   ├── hooks/
+│   │   └── useEditorState.ts      # Editor state management
+│   ├── utils/
+│   │   └── markdownProcessor.ts   # Markdown to HTML conversion
 │   ├── styles/
 │   │   └── globals.css           # CSS that doesn't break
 │   └── App.tsx                   # Where everything comes together

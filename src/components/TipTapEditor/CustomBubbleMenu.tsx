@@ -144,7 +144,6 @@ export default function CustomBubbleMenu({
           <div className="separator" />
           <button
             onClick={() => {
-              console.log('BubbleMenu button clicked');
               onOpenCommandPalette();
             }}
             title="Command Palette (Cmd+K or /)"

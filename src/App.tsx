@@ -1,12 +1,18 @@
 import { useState, useEffect, useCallback } from "react";
 import "./styles/globals.css";
 import TipTapEditor from "./components/TipTapEditor/TipTapEditor";
-import { FiEye, FiDownload, FiUpload } from "react-icons/fi";
+import { FiEye, FiDownload, FiUpload, FiCopy } from "react-icons/fi";
 import { toast, Toaster } from "sonner";
+import { LeftSidebar } from "./components/Sidebar/LeftSidebar";
+import { RightSidebar } from "./components/Sidebar/RightSidebar";
+import { useEditorState } from "./hooks/useEditorState";
 
+// TODO: [Error Handling] Wrap App in React Error Boundary to catch runtime errors
+// Create ErrorBoundary component to show fallback UI on crashes
 function App() {
   const [fileName, setFileName] = useState("README.md");
   const [content, setContent] = useState("");
+  const { editor, isEditorReady, setEditor, executeCommand } = useEditorState();
 
   const handleExportMarkdown = useCallback(() => {
     const blob = new Blob([content], { type: "text/markdown" });
@@ -34,6 +40,14 @@ function App() {
     };
     fileInput.click();
   };
+
+  const handleCopyMarkdown = useCallback(() => {
+    navigator.clipboard.writeText(content).then(() => {
+      toast.success("Markdown copied to clipboard!");
+    }).catch(() => {
+      toast.error("Failed to copy markdown");
+    });
+  }, [content]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -66,23 +80,31 @@ function App() {
             type="text"
             value={fileName}
             onChange={(e) => setFileName(e.target.value)}
-            className="px-3 py-1.5 bg-github-bg border border-github-border rounded text-github-text text-sm w-48 focus:outline-none focus:border-github-accent"
+            className="px-3 py-1.5 text-sm bg-github-bg border border-github-border rounded-lg text-github-text w-48 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-transparent transition-colors"
             placeholder="README.md"
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleCopyMarkdown}
+            className="inline-flex items-center justify-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg border border-github-border bg-github-bg text-github-muted hover:bg-github-surface hover:text-github-text transition-colors"
+            title="Copy Markdown to Clipboard"
+          >
+            <FiCopy className="w-4 h-4" />
+            <span className="hidden sm:inline">Copy</span>
+          </button>
           <button
             onClick={handleImportFile}
-            className="flex items-center gap-2 px-4 py-2 bg-github-surface border border-github-border rounded-md text-github-text text-sm font-medium hover:bg-github-bg transition-all duration-200 shadow-sm hover:shadow"
+            className="inline-flex items-center justify-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg border border-github-border bg-github-bg text-github-muted hover:bg-github-surface hover:text-github-text transition-colors"
             title="Import File (Ctrl+O)"
           >
             <FiUpload className="w-4 h-4" />
-            Import
+            <span className="hidden sm:inline">Import</span>
           </button>
           <button
             onClick={handleExportMarkdown}
-            className="flex items-center gap-2 px-4 py-2 bg-github-text hover:bg-gray-100 text-github-bg rounded-md text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md"
+            className="inline-flex items-center justify-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg border border-github-border bg-github-bg text-github-muted hover:bg-github-surface hover:text-github-text transition-colors"
             title="Export Markdown (Ctrl+S)"
           >
             <FiDownload className="w-4 h-4" />
@@ -91,19 +113,31 @@ function App() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-hidden bg-github-bg">
-        <TipTapEditor
-          content={content}
-          onChange={(html) => {
-            // For now we're storing HTML, but we can convert to markdown later
-            setContent(html);
-          }}
-          onMarkdownChange={(markdown) => {
-            // This gives us the markdown version
-            setContent(markdown);
-          }}
-        />
+      {/* Main Content with Sidebars */}
+      <main className="flex-1 flex overflow-hidden bg-github-bg">
+        {/* Left Sidebar */}
+        <LeftSidebar editor={editor} isEditorReady={isEditorReady} />
+        
+        {/* Editor */}
+        <div className="flex-1 overflow-hidden">
+          <TipTapEditor
+            content={content}
+            onChange={(html) => {
+              // For now we're storing HTML, but we can convert to markdown later
+              setContent(html);
+            }}
+            onMarkdownChange={(markdown) => {
+              // This gives us the markdown version
+              setContent(markdown);
+            }}
+            onEditorReady={(editorInstance) => {
+              setEditor(editorInstance);
+            }}
+          />
+        </div>
+        
+        {/* Right Sidebar */}
+        <RightSidebar editor={editor} isEditorReady={isEditorReady} executeCommand={executeCommand} />
       </main>
 
       <Toaster 
