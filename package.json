@@ -42,7 +42,7 @@
     "@tiptap/extension-code-block-lowlight": "^3.0.7",
     "@tiptap/extension-color": "^3.0.7",
     "@tiptap/extension-gapcursor": "^3.0.7",
-    "@tiptap/extension-highlight": "^3.0.7",
+    "@tiptap/extension-highlight": "^3.0.9",
     "@tiptap/extension-image": "^3.0.7",
     "@tiptap/extension-link": "^3.0.7",
     "@tiptap/extension-placeholder": "^3.0.7",
