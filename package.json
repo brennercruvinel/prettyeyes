@@ -39,7 +39,7 @@
     "@tailwindcss/postcss": "^4.0.0",
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/react-virtual": "^3.13.12",
-    "@tiptap/extension-code-block-lowlight": "^3.0.7",
+    "@tiptap/extension-code-block-lowlight": "^3.3.0",
     "@tiptap/extension-color": "^3.0.7",
     "@tiptap/extension-gapcursor": "^3.0.7",
     "@tiptap/extension-highlight": "^3.0.7",
